@@ -50,6 +50,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://:9092
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./kafka:/kafka
 
   restproxy:
     image: confluentinc/cp-kafka-rest:5.2.1
@@ -160,6 +161,9 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     environment:
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
     networks:
@@ -182,7 +186,7 @@ services:
     container_name: kibana
     ports:
       - "5601:5601"
-    networks:
+    networks:  
       - elk
     depends_on:
       - elasticsearch
